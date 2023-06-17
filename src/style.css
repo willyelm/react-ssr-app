@@ -1,0 +1,17 @@
+@import '../scripts/reset.css';
+
+:root {
+  --main-color: brown;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+#root {
+  display: flex;
+}
+
