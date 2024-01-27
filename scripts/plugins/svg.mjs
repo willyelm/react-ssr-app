@@ -2,8 +2,7 @@
  * @author Will Medina <williams.medinaa@gmail.com>
  */
 import { readFile } from 'fs/promises';
-import { PluginBuild } from 'esbuild';
-import { parseFragment, parse, serialize } from 'parse5';
+import { parseFragment } from 'parse5';
 
 export function camelCase(text) {
   return (text || '').replace(/[-\:]([a-z])/g, (g) => g[1].toUpperCase());
@@ -15,15 +14,8 @@ const replaceMap = {
 }
 
 export async function SVG2JSX(
-  content: string,
-  options: {
-    props?: Object,
-    colors?: {
-      name: string,
-      color: string,
-      variable: string,
-    }[]
-  } = {}
+  content,
+  options = {}
 ) {
   const node = parseFragment(content);
   const svg = node.childNodes.filter((node) => node.nodeName === 'svg');
@@ -32,14 +24,7 @@ export async function SVG2JSX(
 
 export function transform(
   nodes,
-  options: {
-    props?: Object,
-    colors?: {
-      name: string,
-      color: string,
-      variable: string,
-    }[]
-  } = {}
+  options = {}
 ) {
   return nodes
     .filter(({ nodeName, value }) =>
@@ -51,7 +36,7 @@ export function transform(
         tagName,
         childNodes
       } = node;
-      const props: any = {
+      const props = {
         key: index
       }
       if (attrs) {
@@ -73,7 +58,6 @@ export function transform(
         });
       }
       if (tagName === 'svg') {
-        // console.log('parsing', node);
         const useProps = [
           'className',
           'width',
@@ -130,7 +114,7 @@ export function transform(
 export const svg = ({ jsxImportSource = 'react' } = {}) => {
   return {
     name: 'SVG',
-    setup(build: PluginBuild) {
+    setup(build) {
       build.onLoad({ filter: /\.svg$/ }, async ({ path: origin }) => {
         const fileData = await readFile(origin);
         const svg = fileData.toString();
@@ -148,3 +132,5 @@ export const svg = ({ jsxImportSource = 'react' } = {}) => {
     },
   };
 }
+
+export default svg;

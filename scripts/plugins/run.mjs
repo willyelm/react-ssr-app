@@ -1,9 +1,9 @@
 /**
  * @author Will Medina <williams.medinaa@gmail.com>
  */
-import { PluginBuild } from 'esbuild';
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import path from 'path';
+
 
 export const start = (command, args, options) => {
   const child = spawn(command, args, options);
@@ -30,18 +30,19 @@ export const start = (command, args, options) => {
   return child;
 }
 
-export const run = (entry: string) => {
+export const run = (entryFile, entryArgs = []) => {
   return {
     name: 'run',
-    setup(build: PluginBuild) {
-      const dir = build.initialOptions.outdir;
-      const entryPath = path.join(dir, entry);
-      let task: ChildProcessWithoutNullStreams;
+    setup(build) {
+      const { base } = path.parse(build.initialOptions.outdir);
+      const entryLocation = path.join(base, entryFile);
+      let task;
       build.onEnd(() => {
-        if (task) {
-          task.kill();
-        }
-        task = start('node', [entryPath], {});
+        if (task) task.kill();
+        task = start('node', [...entryArgs, entryLocation], {
+          cwd: process.cwd(),
+          env: process.env
+        });
       });
     },
   };

@@ -1,15 +1,14 @@
 /**
  * @author Will Medina <williams.medinaa@gmail.com>
  */
-import { PluginBuild } from 'esbuild';
 import { createServer } from 'http';
 
 export const livereload = () => {
-  const port = 8082;
+  const port = 8001;
   const baseURL = `http://localhost:${port}`;
   return {
     name: 'reload',
-    setup(build: PluginBuild) {
+    setup(build) {
       const clients = [];
       const banner = `(() => new EventSource("${baseURL}").onmessage = () => location.reload())();`
       // Add banner 
@@ -36,7 +35,7 @@ export const livereload = () => {
             Connection: 'keep-alive',
           }),
         );
-      }).listen(8082);
+      }).listen(port);
     }
   };
 };

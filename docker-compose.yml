@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+
+  nginx:
+    container_name: nginx
+    build:
+      context: './'
+      dockerfile: './containers/nginx/Dockerfile'
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - server
+    restart: always
+
+  node:
+    container_name: node
+    build:
+      context: './'
+      dockerfile: './containers/node/Dockerfile'
+    volumes:
+      - ./public/:/usr/src/app/public
+      - ./dist/:/usr/src/app/dist
+    ports:
+      - "8000:8000"
+    networks:
+      - server
+    restart: always
+
+networks:
+  server:
+    driver: bridge
