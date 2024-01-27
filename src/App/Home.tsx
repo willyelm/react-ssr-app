@@ -3,7 +3,7 @@ import { Head } from 'src/Application';
 export function Home() {
   return <>
     <Head>
-      <title> My App - Home </title>
+      <title> App - Home  </title>
       <meta name='description' content='This is my home page' />
     </Head>
     <article className='relative mx-auto max-w-xl py-32 text-center'>

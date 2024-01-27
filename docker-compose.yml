@@ -9,9 +9,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     networks:
       - server
     restart: always
@@ -22,10 +19,12 @@ services:
       context: './'
       dockerfile: './containers/node/Dockerfile'
     volumes:
+      - ./src/:/usr/src/app/src
       - ./public/:/usr/src/app/public
-      - ./dist/:/usr/src/app/dist
+      - ./scripts/:/usr/src/app/scripts
     ports:
       - "8000:8000"
+      - "8001:8001"
     networks:
       - server
     restart: always

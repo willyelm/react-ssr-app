@@ -1,12 +1,21 @@
-FROM node:16
+FROM node:21
+
+ARG ENV
+ENV ENV=$ENV
 
 WORKDIR /usr/src/app
+
 COPY package*.json ./
-ADD public/ ./public
-ADD dist/ ./dist
+COPY tailwind.config.js ./
+COPY tsconfig.json ./
+ADD src/ ./
+ADD scripts/ ./
+ADD public/ ./
 
-RUN npm ci --only=production
+ADD ./containers/node/run.sh .
 
-EXPOSE 8000
+EXPOSE 8000 8001
 
-CMD [ "node", "dist/server.js" ]
+ENTRYPOINT ["sh", "run.sh"]
+# RUN npm ci --only=production
+# CMD [ "node", "dist/server.js" ]

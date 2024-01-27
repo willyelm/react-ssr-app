@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  node: 
+    build:
+      args: 
+        - ENV=development
+    restart: "no"
