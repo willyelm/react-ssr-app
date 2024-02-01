@@ -13,7 +13,7 @@ const replaceMap = {
   'data-name': 'dataname'
 }
 
-export async function SVG2JSX(
+export async function convertToJSX(
   content,
   options = {}
 ) {
@@ -58,14 +58,14 @@ export function transform(
         });
       }
       if (tagName === 'svg') {
-        const useProps = [
+        const svgProps = [
           'className',
           'width',
           'height',
           'fill'
         ];
         const internal = {};
-        for (const p of useProps) {
+        for (const p of svgProps) {
           const a = `props.${p}`;
           internal[p] = props[p] ? `${a} || ${props[p]}` : a;
         }
@@ -118,7 +118,7 @@ export const svg = ({ jsxImportSource = 'react' } = {}) => {
       build.onLoad({ filter: /\.svg$/ }, async ({ path: origin }) => {
         const fileData = await readFile(origin);
         const svg = fileData.toString();
-        const jsx = await SVG2JSX(svg);
+        const jsx = await convertToJSX(svg);
         return {
           contents: [
             `import { jsx } from '${jsxImportSource}/jsx-runtime';`,

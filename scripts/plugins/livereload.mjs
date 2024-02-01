@@ -35,7 +35,8 @@ export const livereload = () => {
             Connection: 'keep-alive',
           }),
         );
-      }).listen(port);
+      })
+        .listen(port);
     }
   };
 };

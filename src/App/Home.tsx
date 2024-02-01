@@ -1,6 +1,7 @@
+import { FunctionComponent } from 'react';
 import { Head } from 'src/Application';
 
-export function Home() {
+export const Home: FunctionComponent = () => {
   return <>
     <Head>
       <title> App - Home  </title>
@@ -8,9 +9,10 @@ export function Home() {
     </Head>
     <article className='relative mx-auto max-w-xl py-32 text-center'>
       <h1 className='text-4xl font-medium mb-2'> Hello World </h1>
-      <p>
+      <p className='my-5'>
         This is a damn simple home page
       </p>
+      <a href="/blog" className='text-neutral-500'> Read my blog </a>
     </article>
   </>;
 }

@@ -14,6 +14,7 @@ The project configuration uses the following dependencies:
 ```sh
 # Start development
 npm run dev
+
 # generate build for production
 npm run build
 # start project using distribution files
@@ -23,12 +24,11 @@ npm start
 ## Running Docker
 ```sh
 # start docker instance
-docker compose up --build -d # Production
 docker compose -f docker-compose.yml -f development.yml up --build -d # Development
+docker compose up --build -d # Production
 
 # stop instance
 docker compose down
-
 # build
 docker compose build 
 ```

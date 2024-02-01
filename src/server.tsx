@@ -9,6 +9,10 @@ import { readFile, stat, access } from 'fs/promises';
 import { renderToString } from 'react-dom/server';
 import { ServerApp } from './App/ServerApp';
 
+const env = process.env.NODE_ENV || 'development';
+
+console.log('env', env);
+
 function getMimeType(filePath: string) {
   const type = path.extname(filePath).replace(/^\./, '');
   switch (type) {
@@ -53,23 +57,23 @@ const server = createServer(async (
   req: IncomingMessage,
   res: ServerResponse
 ) => {
-  const url = new URL(req.url, `http://${req.headers.host}/`);
-  const filePath = path.join('public', path.normalize(url.pathname));
+  const r = new URL(req.url, `http://${req.headers.host}/`);
+  const filePath = path.join('public', path.normalize(r.pathname));
   const fileContent = await getFileContent(filePath);
+
   if (fileContent) {
-    // console.log(`\n[FILE] ${filePath}`);
     const mimeType = getMimeType(filePath);
     res.writeHead(200, {
       'Content-Type': `${mimeType}; charset=UTF-8`
     });
-    res.end(fileContent, 'utf-8');
+    return res.end(fileContent, 'utf-8');
   } else {
-    console.log(`\n[${req.method}] ${url.pathname}`);
+    console.log(`\n[${req.method}] ${req.url}`);
     const content = renderToString(<ServerApp location={req.url} />);
     res.writeHead(200, {
       'Content-Type': 'text/html; charset=UTF-8'
     });
-    res.end(`<!DOCTYPE html>${content}`, 'utf-8');
+    return res.end(`<!DOCTYPE html>${content}`, 'utf-8');
   }
 });
 

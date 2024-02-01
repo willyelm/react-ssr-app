@@ -1,6 +1,6 @@
 // Markdown
 declare module '*.mdx' {
-  const markdown: string;
+  const markdown: any;
   export default markdown;
 }
 // Vector React Elements
